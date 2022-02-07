@@ -1,3 +1,5 @@
+# Algorithm
+Pospelov Sergey Alekseevich
 
 ```shell
 pip install pipenv
