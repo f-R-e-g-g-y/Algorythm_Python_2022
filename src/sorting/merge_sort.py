@@ -1,52 +1,27 @@
-"""
->>> import io, sys 
->>> sys.stdin = io.StringIO(chr(10).join([\
-'1',\
-'1'\
-]))
->>> task_merge_sort()
-1
->>> sys.stdin = io.StringIO(chr(10).join([\
-'2',\
-'3 1',\
-]))
->>> task_merge_sort()
-1 2 1 3
-1 3 
->>> sys.stdin = io.StringIO(chr(10).join([\
-'5',\
-'5 4 3 2 1',\
-]))
->>> task_merge_sort()
-1 2 4 5
-4 5 1 2
-3 5 1 3
-1 5 1 5
-1 2 3 4 5 
->>> print(merge([2,3,4],[1,2,3]))
-[1, 2, 2, 3, 3, 4]
-"""
-
 def merge(A, B):
-    res = []
-    return res
+    a=[]
+    x=0
+    y=0
+    while x < len(A) and y < len(B):
+        if A[x] <= B[y]:
+            a.append(A[x])
+            x += 1
+        else:
+            a.append(B[y])
+            y += 1
+    a += A[x:]
+    a += B[y:]
+    return a
 
-def merge_sort(A):
-    if len(A) == 1:
-        return A
-    l = A[0:len(A)//2]
-    r = A[len(A)//2:]
-    l = merge_sort(l)
-    r = merge_sort(r)
-    print("{:d} {:d}".format(r[0], l[-1]))
-    return merge(l, r)
+def merge_sort(A, nach, konec):
+    if (konec - nach) == 1:
+        return A[nach:konec]
+    centr = int((nach + konec) / 2)
+    left = merge_sort(A, nach, centr)
+    right = merge_sort(A, centr, konec)
+    z = merge(left, right)
+    print(nach + 1, konec, z[0], z[-1])
+    return z
 
-def task_merge_sort():
-    n = int(input())
-    arr = list(map(int, input().split(" ")))
-    res = merge_sort(arr)
-    print(" ".join(list(map(str,res))))
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod(verbose=True)
+n = int(input())
+print(*merge_sort(list(map(int, input().split())), 0, n))
